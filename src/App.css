@@ -24,6 +24,7 @@ body{
 
 .jsonFormatter__lineItemsCounter{
   user-select: none;
+  width: 25px;
 }
 .jsonFormatter__lineItemOutput--red{
   color: red;
@@ -33,4 +34,7 @@ body{
 }
 .jsonFormatter__lineItemOutput--black{
   color: black;
+}
+.jsonFormatter__lineItemOutput--orange{
+  color: #ff6c37;
 }
