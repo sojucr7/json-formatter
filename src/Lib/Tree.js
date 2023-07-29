@@ -1,115 +1,118 @@
 import { Entity } from "./Entity";
-
+import {isObject} from './Utils';
 export class Tree {
-    isObject(object) {
-        return (
-            typeof object === "object" && !Array.isArray(object) && object !== null
-        );
-    }
 
-    heirarchy;
+
+    heirarchy = [];
 
     objectMapping(entity, level) {
         let items = [];
-        let lineItems = [];
         Object.keys(entity).map((key, index) => {
-
             let value = entity[key];
             let color = "blue";
             if (Array.isArray(entity[key])) {
                 value = "[";
                 color = "black";
             }
-
-            if (this.isObject(entity[key])) {
+            if (isObject(entity[key])) {
                 value = "{";
                 color = "black";
             }
-
             items.push({
                 values: [key, " :", ` ${value}`],
                 colors: ["orange", "black", color],
+                style: {
+                    marginLeft: level * 20
+                }
             });
             if (Array.isArray(entity[key])) {
-                items[items.length - 1]["children"] = [...this.arrayMapping(
+                items = [...items, ...this.arrayMapping(
                     entity[key],
                     level + 1
                 ), ...[{
                     values: ["]"],
                     colors: ["black"],
+                    style: {
+                        marginLeft: level * 20
+                    }
                 }]];
             }
-
-            if (this.isObject(entity[key])) {
-                items[items.length - 1]["children"] = [...this.objectMapping(
+            if (isObject(entity[key])) {
+                items = [...items, ...this.objectMapping(
                     entity[key],
                     level + 1
                 ), ...[{
                     values: ["}"],
                     colors: ["black"],
+                    style: {
+                        marginLeft: level * 20
+                    }
                 }]];
             }
         });
-
-        lineItems.push({ children: items });
-        return lineItems;
+        return items;
     }
 
     arrayMapping(entity, level) {
         let items = [];
-        let lineItems = [];
         entity.forEach((item, index1) => {
-
             items.push({
                 values: ["{"],
                 colors: ["black"],
+                style: {
+                    marginLeft: level * 20
+                }
             });
-
-            items = [...items, ...this.objectMapping(item, level), ...[{
+            items = [...items, ...this.objectMapping(item, level + 1), ...[{
                 values: ["}"],
                 colors: ["black"],
+                style: {
+                    marginLeft: level * 20
+                }
             }]];
         });
-        lineItems.push({ children: items });
-        return lineItems;
+        return items;
     }
 
     generateTree(entity, level = 0) {
-        if (this.isObject(entity)) {
+        if (isObject(entity)) {
             this.heirarchy = [...[{
                 values: ["{"],
                 colors: ["black"],
+                style: {
+                    marginLeft: 0
+                }
             }],
-            ...this.objectMapping(entity, level),
+            ...this.objectMapping(entity, level + 1),
             ...[{
                 values: ["}"],
                 colors: ["black"],
+                style: {
+                    marginLeft: 0
+                }
             }]]
 
         } else {
             this.heirarchy = [...[{
                 values: ["["],
                 colors: ["black"],
+                style: {
+                    marginLeft: 0
+                }
             }],
-            ...this.arrayMapping(entity, level),
+            ...this.arrayMapping(entity, level + 1),
             ...[{
                 values: ["]"],
                 colors: ["black"],
+                style: {
+                    marginLeft: 0
+                }
             }]];
         }
         return this
     }
 
     size(heirarchy) {
-        let count=0
-        heirarchy.forEach((item, index1) => {
-            if(item?.values){
-                count++;
-            }
-            if(item.children){
-                count+=this.size(item.children)
-            }
-        })
-        return count
+        return this.heirarchy.length
     }
 }
