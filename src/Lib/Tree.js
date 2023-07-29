@@ -1,74 +1,101 @@
-import { Entity } from "./Entity"
+import { Entity } from "./Entity";
 
 export class Tree {
-    constructor() {
-        this.lineItems = []
+  isObject(object) {
+    return (
+      typeof object === "object" && !Array.isArray(object) && object !== null
+    );
+  }
+
+  objectMapping(entity, level) {
+    let items = [];
+    let lineItems = [];
+    Object.keys(entity).map((key, index) => {
+      
+      let value = entity[key];
+      let color = "blue";
+      if (Array.isArray(entity[key])) {
+        value = "[";
+        color = "black";
+      }
+
+      if (this.isObject(entity[key])) {
+        value = "{";
+        color = "black";
+      }
+
+      items.push({
+        values: [key, " :", ` ${value}`],
+        colors: ["orange", "black", color],
+      });
+
+      if (Array.isArray(entity[key])) {
+        items[items.length - 1]["children"] =[...this.arrayMapping(
+          entity[key],
+          level + 1
+        ),...[{
+          values: ["]"],
+          colors: ["black"],
+        }]] ;
+      }
+
+      if (this.isObject(entity[key])) {
+        items[items.length - 1]["children"] = [...this.objectMapping(
+          entity[key],
+          level + 1
+        ),...[{
+          values: ["}"],
+          colors: ["black"],
+        }]];
+      }
+    });
+
+    lineItems.push({children:items});
+    return lineItems;
+  }
+
+  arrayMapping(entity, level) {
+    let items = [];
+    let lineItems = [];
+    entity.forEach((item, index1) => {
+
+      items.push({
+        values: ["{"],
+        colors: ["black"],
+      });
+
+      items = [...items, ...this.objectMapping(item, level),...[{
+        values: ["}"],
+        colors: ["black"],
+      }]];
+    });
+    lineItems.push({children:items});
+    return lineItems;
+  }
+
+  generateTree(entity, level = 0) {
+    if (this.isObject(entity)) {
+      
+      return [...[{
+        values: ["{"],
+        colors: ["black"],
+      }],
+      ...this.objectMapping(entity, level),
+      ...[{
+        values: ["}"],
+        colors: ["black"],
+      }]];
+     
+    } else {      
+      return [...[{
+        values: ["["],
+        colors: ["black"],
+      }],
+      ...this.arrayMapping(entity, level),
+      ...[{
+        values: ["]"],
+        colors: ["black"],
+      }]];
     }
-
-    isObject(object){
-        return typeof object === 'object' && !Array.isArray(object) && object !== null
-    }
-
-    generateTree(entity, level = 0) {
-        if (this.isObject(entity)) {
-
-            Object.keys(entity).map((key, index) => {
-
-                let value = entity[key]
-                let color = 'blue'
-                if (Array.isArray(entity[key])) {
-                    value = '['
-                    color = 'black'
-                }
-                if (this.isObject(entity[key])) {
-                    value = '{'
-                    color = 'black'
-                }
-                this.lineItems.push(new Entity([key, ' :', ` ${value}`], ['orange', 'black', color], []))
-
-                if (Array.isArray(entity[key]) || this.isObject(entity[key])) {
-
-                    this.lineItems[this.lineItems.length - 1]['children'] = this.generateTree(entity[key], level + 1)
-                }
-            })
-            this.lineItems.push(new Entity(['}'], ['black'], []))
-        }
-
-        if (Array.isArray(entity)) {
-            entity.forEach((item) => {
-
-                this.lineItems.push(new Entity(['{'], ['black'], []))
-                Object.keys(item).map((key, index) => {
-
-                    let value = item[key]
-                    let color = 'blue'
-                    if (Array.isArray(item[key])) {
-                        value = '['
-                        color = 'black'
-                    }
-                    if (this.isObject(item[key])) {
-                        value = '{'
-                        color = 'black'
-                    }
-
-                    this.lineItems.push(new Entity([key, ' :', ` ${value}`], ['orange', 'black', color], []))
-
-                    if (Array.isArray(item[key]) || this.isObject(item[key])) {
-                        this.lineItems[this.lineItems.length - 1]['children'] = this.generateTree(item[key], level + 1)
-                    }
-                })
-
-                this.lineItems.push({
-                    values: ['}'],
-                    colors: ['black']
-                })
-            })
-
-            this.lineItems.push({
-                values: [']'],
-                colors: ['black']
-            })
-        }
-        return this.lineItems
-    }
+  }
 }

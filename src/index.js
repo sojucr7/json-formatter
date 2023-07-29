@@ -6,27 +6,16 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const userObject={
+const userObject=[{
   name:'soju',
   age:32,
-  gender:'Male',
-  address:{
-    zip:689641,
-    
-  },
   contact:[{
     gmail:true,
     yahoo:false
   }]
-  
-}
+}]
 root.render(
   <React.StrictMode>
     <App json={userObject}/>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

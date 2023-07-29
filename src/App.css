@@ -38,3 +38,6 @@ body{
 .jsonFormatter__lineItemOutput--orange{
   color: #ff6c37;
 }
+.jsonFormatter__lineItemOutput{
+  margin-left: 15px;
+}
