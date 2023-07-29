@@ -1,14 +1,8 @@
 .jsonFormatter{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   min-width: 800px;
   border:1px solid black;
-  background-color: #E7E9EB;
-}
-.jsonFormatter__lineItems{
+  position: relative;
   display: flex;
-  gap:5px;
 }
 body{
   position: relative;
@@ -24,7 +18,10 @@ body{
 
 .jsonFormatter__lineItemsCounter{
   user-select: none;
-  width: 25px;
+  text-align: center;
+  position: absolute;  
+  border-right: 1px solid black;
+  width: 100%;
 }
 .jsonFormatter__lineItemOutput--red{
   color: red;
@@ -39,5 +36,13 @@ body{
   color: #ff6c37;
 }
 .jsonFormatter__lineItemOutput{
-  margin-left: 15px;
+  margin-left: 20px;
+}
+.jsonFormatter__lineItemsCounterContainer{
+  position: relative;  
+  max-width: 40px;
+  min-width: 25px;
+}
+.jsonFormatter__lineItemsDataContainer{
+  margin-left: -15px;
 }

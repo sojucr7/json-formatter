@@ -6,14 +6,13 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const userObject=[{
-  name:'soju',
-  age:32,
-  contact:[{
-    gmail:true,
-    yahoo:false
-  }]
-}]
+const userObject={  
+  "employee": {  
+      "name":       "sonoo",   
+      "salary":      56000,   
+      "married":    true  
+  }  
+}  
 root.render(
   <React.StrictMode>
     <App json={userObject}/>
