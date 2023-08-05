@@ -5,11 +5,10 @@ import { useEffect, useState } from 'react';
 
 function App({ json }) {
   let [jsonState, setJsonState] = useState([])
-  let [treeSize, setTreeSize] = useState(0)
 
   useEffect(() => {
     let tree = new Tree().generateTree(json)
-    setTreeSize(tree.size(tree.heirarchy))
+    //tree.closingIndex(jsonState,'3-0')
     setJsonState(tree.heirarchy)
   }, [])
 

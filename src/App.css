@@ -20,9 +20,17 @@ body{
 .jsonFormatter__lineItemCounter{
   user-select: none; 
   border-right: 1px solid black;
-  min-width: 25px;
+  min-width: 35px;
   max-width: 45px;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(31, 35, 40, 0.08);
+}
+.jsonFormatter__lineItemCounterToggleBtn{
+  width: 10px;
+  display: inline-block;
 }
 .jsonFormatter__lineItemEntity--red{
   color: red;

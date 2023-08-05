@@ -1,7 +1,5 @@
-import { Entity } from "./Entity";
-import {isObject} from './Utils';
+import { isObject } from './Utils';
 export class Tree {
-
 
     heirarchy = [];
 
@@ -23,7 +21,9 @@ export class Tree {
                 colors: ["orange", "black", color],
                 style: {
                     marginLeft: level * 20
-                }
+                },
+                canCollapse:Array.isArray(entity[key]) || isObject(entity[key]),
+                collapseId:Array.isArray(entity[key]) || isObject(entity[key])?`${level}-${index}`:''
             });
             if (Array.isArray(entity[key])) {
                 items = [...items, ...this.arrayMapping(
@@ -34,7 +34,9 @@ export class Tree {
                     colors: ["black"],
                     style: {
                         marginLeft: level * 20
-                    }
+                    },
+                    canCollapse:false,
+                    collapseId:`${level}-${index}`
                 }]];
             }
             if (isObject(entity[key])) {
@@ -46,7 +48,9 @@ export class Tree {
                     colors: ["black"],
                     style: {
                         marginLeft: level * 20
-                    }
+                    },
+                    canCollapse:false,
+                    collapseId:`${level}-${index}`
                 }]];
             }
         });
@@ -56,20 +60,54 @@ export class Tree {
     arrayMapping(entity, level) {
         let items = [];
         entity.forEach((item, index1) => {
-            items.push({
-                values: ["{"],
-                colors: ["black"],
-                style: {
-                    marginLeft: level * 20
-                }
-            });
-            items = [...items, ...this.objectMapping(item, level + 1), ...[{
-                values: ["}"],
-                colors: ["black"],
-                style: {
-                    marginLeft: level * 20
-                }
-            }]];
+            if (isObject(item)) {
+                items.push({
+                    values: ["{"],
+                    colors: ["black"],
+                    style: {
+                        marginLeft: level * 20
+                    },
+                    canCollapse:true,
+                    collapseId:`${level}-${index1}`
+                });
+                items = [...items, ...this.objectMapping(item, level + 1), ...[{
+                    values: ["}"],
+                    colors: ["black"],
+                    style: {
+                        marginLeft: level * 20
+                    },
+                    canCollapse:false,
+                    collapseId:`${level}-${index1}`
+                }]];
+            }else if(Array.isArray(item)){
+                items.push({
+                    values: ["["],
+                    colors: ["black"],
+                    style: {
+                        marginLeft: level * 20
+                    },
+                    canCollapse:true,
+                    collapseId:`${level}-${index1}`
+                });
+                items = [...items, ...this.arrayMapping(item, level + 1), ...[{
+                    values: ["]"],
+                    colors: ["black"],
+                    style: {
+                        marginLeft: level * 20
+                    },
+                    canCollapse:false,
+                    collapseId:`${level}-${index1}`
+                }]];
+            }else{
+                items.push({
+                    values: [item,','],
+                    colors: ["blue",'black'],
+                    style: {
+                        marginLeft: level * 20
+                    },
+                    canCollapse:false
+                });
+            } 
         });
         return items;
     }
@@ -81,7 +119,9 @@ export class Tree {
                 colors: ["black"],
                 style: {
                     marginLeft: 0
-                }
+                },
+                canCollapse:true,
+                collapseId:0
             }],
             ...this.objectMapping(entity, level + 1),
             ...[{
@@ -89,7 +129,9 @@ export class Tree {
                 colors: ["black"],
                 style: {
                     marginLeft: 0
-                }
+                },
+                canCollapse:false,
+                collapseId:0
             }]]
 
         } else {
@@ -98,7 +140,9 @@ export class Tree {
                 colors: ["black"],
                 style: {
                     marginLeft: 0
-                }
+                },
+                canCollapse:true,
+                collapseId:0
             }],
             ...this.arrayMapping(entity, level + 1),
             ...[{
@@ -106,13 +150,21 @@ export class Tree {
                 colors: ["black"],
                 style: {
                     marginLeft: 0
-                }
+                },
+                canCollapse:false,
+                collapseId:0
             }]];
         }
         return this
     }
 
-    size(heirarchy) {
-        return this.heirarchy.length
+    closingIndex(heirarchy,collapseId){
+        let index=heirarchy.findIndex((item)=>{
+            return item.collapseId==collapseId && !item.canCollapse
+        })
+        if(index==-1){
+            return false
+        }
+        return index+1
     }
 }
