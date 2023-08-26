@@ -12,22 +12,22 @@ function App({ json }) {
     setJsonState(tree.heirarchy)
   }, [])
 
-  const handleOnClick = (lineNumber, isCollapse) => {
+  const handleOnClick = (lineNumber, collapsed) => {
     const tempState = [...jsonState]
     const openingParenthesesIndex = lineNumber - 1
     const closingParenthesesIndex = Entity.closingParenthesesIndex(jsonState, jsonState[openingParenthesesIndex].parenthesesId)
 
     if (closingParenthesesIndex == -1) return
-    //current state of the bracket
-    tempState[openingParenthesesIndex].collapse = isCollapse
+    //change current clicked opening bracket state
+    tempState[openingParenthesesIndex].collapse = collapsed
     //next line of opening bracket
     let i = lineNumber
 
     while (i < closingParenthesesIndex - 1) {
       //hide every child
-      tempState[i].hide = isCollapse
+      tempState[i].hide = collapsed
       //is nested child already collapsed?? then skip
-      if (tempState[i].collapse && isCollapse == false) {
+      if (tempState[i].collapse && collapsed == false) {
         i = Entity.closingParenthesesIndex(jsonState, jsonState[i].parenthesesId) - 1
       } else {
         i++
