@@ -1,7 +1,7 @@
 import './App.css';
-import { Entity } from './Lib/Entity';
 import LineItem from './LineItem';
 import { Tree } from './Lib/Tree';
+import { Entity } from './Lib/Entity';
 import { useEffect, useState } from 'react';
 
 function App({ json }) {
@@ -12,12 +12,26 @@ function App({ json }) {
     setJsonState(tree.heirarchy)
   }, [])
 
-  const handleOnClick = (openingParenthesesIndex, isCollapse) => {
+  const handleOnClick = (lineNumber, isCollapse) => {
     const tempState = [...jsonState]
-    const closingParenthesesIndex = Entity.closingParenthesesIndex(jsonState, jsonState[openingParenthesesIndex - 1].parenthesesId)
+    const openingParenthesesIndex = lineNumber - 1
+    const closingParenthesesIndex = Entity.closingParenthesesIndex(jsonState, jsonState[openingParenthesesIndex].parenthesesId)
+
     if (closingParenthesesIndex == -1) return
-    for (let i = openingParenthesesIndex; i < closingParenthesesIndex; i++) {
-      tempState[i].collapse = isCollapse
+    //current state of the bracket
+    tempState[openingParenthesesIndex].collapse = isCollapse
+    //next line of opening bracket
+    let i = lineNumber
+
+    while (i < closingParenthesesIndex - 1) {
+      //hide every child
+      tempState[i].hide = isCollapse
+      //is nested child already collapsed?? then skip
+      if (tempState[i].collapse && isCollapse == false) {
+        i = Entity.closingParenthesesIndex(jsonState, jsonState[i].parenthesesId) - 1
+      } else {
+        i++
+      }
     }
     setJsonState(tempState)
   }

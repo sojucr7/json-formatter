@@ -16,7 +16,6 @@ export class ArrayTree {
                 let entity2 = new Entity(level, index1)
                     .setValues(["}"])
                     .setColors(["black"])
-                    .setCanCollapse(false)
                 items = [...items, ...new ObjectTree().generateTree(item, level + 1), ...[entity2.getEntity()]];
             } else if (Array.isArray(item)) {
                 let entity1 = new Entity(level, index1)
@@ -27,14 +26,12 @@ export class ArrayTree {
                 let entity2 = new Entity(level, index1)
                     .setValues(["]"])
                     .setColors(["black"])
-                    .setCanCollapse(false)
                 items.push(entity1.getEntity());
                 items = [...items, ...this.generateTree(item, level + 1), ...[entity2.getEntity()]];
             } else {
                 let entity1 = new Entity(level, index1)
                     .setValues([item, ','])
                     .setColors(["blue", 'black'])
-                    .setCanCollapse(false)
                 items.push(entity1.getEntity());
             }
         });

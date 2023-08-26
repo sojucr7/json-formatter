@@ -6,6 +6,7 @@ export class Entity {
         this.style={
             marginLeft: level*20
         }
+        this.canCollapse=false
     }
 
     setValues(values){
@@ -35,12 +36,14 @@ export class Entity {
             colors:this.colors,
             style:this.style,
             canCollapse:this.canCollapse,
+            hide:false,
             collapse:false,
             parenthesesId:`${this.level}-${this.index}`
         }
     }
 
     static closingParenthesesIndex=(heirarchy, parenthesesId)=> {
+        //closing brace have canCollapse false and same parenthesesId
         let index = heirarchy.findIndex((item) => {
             return item.parenthesesId == parenthesesId && !item.canCollapse
         })

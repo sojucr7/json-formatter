@@ -26,14 +26,12 @@ export class ObjectTree {
                 let entity1 = new Entity(level, index)
                     .setValues(["]"])
                     .setColors(["black"])
-                    .setCanCollapse(false)
                 items = [...items, ...new ArrayTree().generateTree(entity[key],level + 1), ...[entity1.getEntity()]];
             }
             if (isObject(entity[key])) {
                 let entity2 = new Entity(level, index)
                     .setValues(["}"])
                     .setColors(["black"])
-                    .setCanCollapse(false)
                 items = [...items, ...this.generateTree(
                     entity[key],
                     level + 1

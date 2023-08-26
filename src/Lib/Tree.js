@@ -17,7 +17,6 @@ export class Tree {
         let rootEntity2 = new Entity(level, 0)
             .setValues(["}"])
             .setColors(["black"])
-            .setCanCollapse(false)
 
         if (isObject(entity)) {
 
@@ -37,7 +36,6 @@ export class Tree {
             let rootEntity2 = new Entity(level, 0)
                 .setValues(["]"])
                 .setColors(["black"])
-                .setCanCollapse(false)
 
             this.heirarchy = [
                 ...[rootEntity1.getEntity()],

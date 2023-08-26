@@ -9,17 +9,17 @@ function LineItem({ entity, lineNumber,onClick }) {
     }
 
     const [collapse,setCollapse] = useState(false)
-
+    
     return (
         <>
-        <div className="jsonFormatter__lineItem" style={{display: entity.collapse ? 'none' : '' }}>
-            <div className='jsonFormatter__lineItemCounter' onClick={handleOnClick}> 
+        <div className={`jsonFormatter__lineItem ${entity.hide?'jsonFormatter__lineItem--hide':''}`} >
+            <div className='jsonFormatter__left' onClick={handleOnClick}> 
                 <span className='jsonFormatter__lineNumber'>{lineNumber < 10 ? 0 : ''}{lineNumber}</span> 
-                {entity.canCollapse?<span className='jsonFormatter__lineItemCounterToggleBtn' > <img width={15} src="/down-arrow.png"/></span>:<span className='jsonFormatter__lineItemCounterToggleBtn'></span>}
+                {entity.canCollapse?<span className={`jsonFormatter__toggleBtn`}> <img width={15} src="/down-arrow.png" style={{transform: collapse ? 'rotate(-90deg)' : '' }}/></span>:<span className='jsonFormatter__toggleBtn'></span>}
             </div>
-            <div className='jsonFormatter__lineItemEntity' style={{ marginLeft: entity.style.marginLeft }}>
+            <div className='jsonFormatter__entity' style={{ marginLeft: entity.style.marginLeft }}>
                 {entity.values?.map((item1, index1) => {
-                    return (<span className={`jsonFormatter__lineItemEntity--${entity.colors[index1]}`} key={index1}>{item1}</span>)
+                    return (<span className={`jsonFormatter__entity--${entity.colors[index1]}`} key={index1}>{item1}</span>)
                 })}
             </div>
         </div>
